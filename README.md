@@ -12,7 +12,7 @@ This is the backend for our team's project for CEN3031 - Introduction to Softwar
    ```sh
    yarn install
    ```
-3.  Install nodemon
+3. Install nodemon
    ```sh
    yarn global add nodemon
    ```
