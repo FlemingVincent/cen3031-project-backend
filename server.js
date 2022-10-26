@@ -7,6 +7,7 @@ const userRoutes = require("./routes/user");
 
 // Express App
 const app = express();
+app.disable("x-powered-by");
 
 // Middleware
 app.use(express.json());
