@@ -6,7 +6,7 @@ This is the backend for our team's project for CEN3031 - Introduction to Softwar
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/FlemingVincent/cen3031-project.git
+   git clone https://github.com/FlemingVincent/cen3031-project-backend.git
    ```
 2. Install packages
    ```sh
