@@ -8,15 +8,19 @@ This is the backend for our team's project for CEN3031 - Introduction to Softwar
    ```sh
    git clone https://github.com/FlemingVincent/cen3031-project-backend.git
    ```
-2. Install packages
+2. Navigate inside the repo.
+   ```sh
+   cd cen3031-project-backend/
+   ```
+3. Install packages
    ```sh
    yarn install
    ```
-3. Install nodemon
+4. Install nodemon
    ```sh
    yarn global add nodemon
    ```
-4. Run
+5. Run
    ```sh
    yarn dev
    ```
