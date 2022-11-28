@@ -18,6 +18,9 @@ router.put("/:id", editPost);
 router.delete("/:id", deletePost);
 
 // get post
-//router.get(":/id", getPost);
+router.get("/:id", getPost);
+
+// like post & dislike post
+// router.put("/:id/like", likePost);
 
 module.exports = router;
