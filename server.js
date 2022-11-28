@@ -4,7 +4,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 
 const userRoutes = require("./routes/user");
-
+const postRoutes = require("./routes/post");
 // Express App
 const app = express();
 app.disable("x-powered-by");
@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 
 // Routes
 app.use("/api/user", userRoutes);
+app.use("/api/post", postRoutes);
 
 // Connect to DB
 mongoose
