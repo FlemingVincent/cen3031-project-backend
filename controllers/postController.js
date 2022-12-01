@@ -1,4 +1,5 @@
 const Post = require("../models/postModel");
+const User = require("../models/userModel");
 
 // create post
 const createPost = async (req, res) => {
@@ -51,12 +52,44 @@ const getPost = async (req, res) => {
 };
 
 // like post
+const likePost = async (req, res) => {
+  try{
+    const obtainedPost = await Post.findById(req.params.id);
+    if(!obtainedPost.likes.includes(req.body.author)){
+      await obtainedPost.updateOne({$push : {likes: req.body.author}});
+      res.status(200).json("Post has been liked!");
+    } else {
+      await obtainedPost.updateOne({$pull : {likes: req.body.author}})
+      res.status(200).json("Post has been disliked!");
+    }
+  } catch (error){
+    res.status(400).json({error: error.message});
+  }
+};
 
-// dislike post
+const fetchPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.body.author);
+    const posts = await Post.find({author: user._id});
+    const followingPosts = await Promise.all(
+      user.following.map((followingID) => {
+          return Post.find({author: followingID});
+      })
+    );
+    const feed = await posts.concat(...followingPosts);
+    feed.sort((a, b) => b.date - a.date);
+    res.json(feed);
+  } catch (error){
+    res.status(400).json({error: error.message});
+  }
+  
+}
 
 module.exports = {
   createPost,
   editPost,
   deletePost,
   getPost,
+  likePost,
+  fetchPosts,
 };
