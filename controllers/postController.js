@@ -7,7 +7,10 @@ const createPost = async (req, res) => {
 
   try {
     const savePost = await newPost.save();
+    const user = await User.findById(newPost.user._id);
+    //res.status(200).json({ user });
     res.status(200).json({ savePost });
+    return user;
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -17,7 +20,7 @@ const createPost = async (req, res) => {
 const editPost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.author === req.body.author) {
+    if (post.user.equals(req.body.user)) {
       await post.updateOne({ $set: req.body });
       res.status(200).json("updated!");
     } else {
@@ -31,7 +34,7 @@ const editPost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post.author === req.body.author) {
+    if (post.user.equals(req.body.user)) {
       await post.deleteOne();
       res.status(200).json("deleted");
     } else {
@@ -45,7 +48,9 @@ const deletePost = async (req, res) => {
 const getPost = async (req, res) => {
   try {
     const obtainedPost = await Post.findById(req.params.id);
+    const user = await User.findById(obtainedPost.user);
     res.status(200).json(obtainedPost);
+    return user;
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -55,11 +60,14 @@ const getPost = async (req, res) => {
 const likePost = async (req, res) => {
   try{
     const obtainedPost = await Post.findById(req.params.id);
-    if(!obtainedPost.likes.includes(req.body.author)){
-      await obtainedPost.updateOne({$push : {likes: req.body.author}});
+    if(!obtainedPost.liked == true){
+      //await obtainedPost.updateOne({$push : {likes: req.body.author}});
+      await obtainedPost.updateOne({$set : {liked : true}});
       res.status(200).json("Post has been liked!");
     } else {
-      await obtainedPost.updateOne({$pull : {likes: req.body.author}})
+      //await obtainedPost.updateOne({$pull : {likes: req.body.author}})
+      //await obtainedPost.updateOne({$pull : {liked: false}})
+      await obtainedPost.updateOne({$set : {liked : false}});
       res.status(200).json("Post has been disliked!");
     }
   } catch (error){
@@ -69,15 +77,16 @@ const likePost = async (req, res) => {
 
 const fetchPosts = async (req, res) => {
   try {
-    const user = await User.findById(req.body.author);
-    const posts = await Post.find({author: user._id});
+    const user = await User.findById(req.body.user);
+    const posts = await Post.find({user: user});
+
     const followingPosts = await Promise.all(
       user.following.map((followingID) => {
-          return Post.find({author: followingID});
+          return Post.find({user: followingID});
       })
     );
-    const feed = await posts.concat(...followingPosts);
-    feed.sort((a, b) => b.date - a.date);
+    feed = await posts.concat(...followingPosts);
+    feed.sort((a, b) => b.createdAt - a.createdAt);
     res.json(feed);
   } catch (error){
     res.status(400).json({error: error.message});
