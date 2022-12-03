@@ -58,41 +58,40 @@ const getPost = async (req, res) => {
 
 // like post
 const likePost = async (req, res) => {
-  try{
+  try {
     const obtainedPost = await Post.findById(req.params.id);
-    if(!obtainedPost.liked == true){
+    if (!obtainedPost.liked == true) {
       //await obtainedPost.updateOne({$push : {likes: req.body.author}});
-      await obtainedPost.updateOne({$set : {liked : true}});
+      await obtainedPost.updateOne({ $set: { liked: true } });
       res.status(200).json("Post has been liked!");
     } else {
       //await obtainedPost.updateOne({$pull : {likes: req.body.author}})
       //await obtainedPost.updateOne({$pull : {liked: false}})
-      await obtainedPost.updateOne({$set : {liked : false}});
+      await obtainedPost.updateOne({ $set: { liked: false } });
       res.status(200).json("Post has been disliked!");
     }
-  } catch (error){
-    res.status(400).json({error: error.message});
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 };
 
 const fetchPosts = async (req, res) => {
   try {
-    const user = await User.findById(req.body.user);
-    const posts = await Post.find({user: user});
+    const user = await User.findById(req.params.id);
+    const posts = await Post.find({ user: user });
 
     const followingPosts = await Promise.all(
       user.following.map((followingID) => {
-          return Post.find({user: followingID});
+        return Post.find({ user: followingID });
       })
     );
     feed = await posts.concat(...followingPosts);
     feed.sort((a, b) => b.createdAt - a.createdAt);
     res.json(feed);
-  } catch (error){
-    res.status(400).json({error: error.message});
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-  
-}
+};
 
 module.exports = {
   createPost,
