@@ -6,7 +6,7 @@ const {
   deletePost,
   getPost,
   likePost,
-  fetchPosts, 
+  fetchPosts,
 } = require("../controllers/postController");
 
 const router = express.Router();
@@ -26,6 +26,6 @@ router.get("/:id", getPost);
 router.put("/:id/like", likePost);
 
 // fetch user post
-router.get("/feed/user", fetchPosts);
+router.get("/feed/:id", fetchPosts);
 
 module.exports = router;
