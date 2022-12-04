@@ -1,5 +1,5 @@
-const Post = require("../models/postModel");
 const User = require("../models/userModel");
+const Post = require("../models/postModel");
 
 // create post
 const createPost = async (req, res) => {
@@ -78,14 +78,24 @@ const likePost = async (req, res) => {
 const fetchPosts = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    const posts = await Post.find({ user: user });
+    const posts = await Post.find({ user: user }).populate(
+      {
+          path: "user",
+          model: "User"
+      }
+    );
 
     const followingPosts = await Promise.all(
       user.following.map((followingID) => {
-        return Post.find({ user: followingID });
+        return Post.find({ user: followingID }).populate(
+          {
+            path: "user",
+            model: "User"
+          }
+        );
       })
     );
-    feed = await posts.concat(...followingPosts);
+    const feed = await posts.concat(...followingPosts);
     feed.sort((a, b) => b.createdAt - a.createdAt);
     res.json(feed);
   } catch (error) {
