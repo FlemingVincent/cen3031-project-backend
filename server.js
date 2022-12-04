@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 
 const userRoutes = require("./routes/user");
 const postRoutes = require("./routes/post");
+
 // Express App
 const app = express();
 app.disable("x-powered-by");
