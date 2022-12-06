@@ -118,6 +118,20 @@ const followUser = async (req, res) => {
   }
 };
 
+// fetch all users with the correct attributes
+const fetchAllUser = async (req, res) => {
+    try {
+      const users = await User.find({}).select(
+        "firstname lastname profilepicture role company"
+      );
+      
+      res.status(200).json(users);
+      
+    } catch (error) {
+      res.status(400).json({ error: error.message});
+    }
+};
+
 module.exports = {
   signupUser,
   loginUser,
@@ -125,4 +139,5 @@ module.exports = {
   deleteUser,
   getUser,
   followUser,
+  fetchAllUser,
 };

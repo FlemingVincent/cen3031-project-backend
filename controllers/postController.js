@@ -103,6 +103,17 @@ const fetchPosts = async (req, res) => {
   }
 };
 
+// gets all the posts from the req id
+const userPosts = async (req, res) => {
+  try{
+    const user = await User.findById(req.params.id);
+    const posts = await Post.find({ user: user });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(400).json({error: error.message});
+  }
+}
+
 module.exports = {
   createPost,
   editPost,
@@ -110,4 +121,5 @@ module.exports = {
   getPost,
   likePost,
   fetchPosts,
+  userPosts,
 };
