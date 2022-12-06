@@ -107,7 +107,10 @@ const fetchPosts = async (req, res) => {
 const userPosts = async (req, res) => {
   try{
     const user = await User.findById(req.params.id);
-    const posts = await Post.find({ user: user });
+    const posts = await Post.find({ user: user }).populate({
+      path: "user",
+      model: "User",
+    });
     res.status(200).json(posts);
   } catch (error) {
     res.status(400).json({error: error.message});
