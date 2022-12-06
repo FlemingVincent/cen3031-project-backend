@@ -7,6 +7,7 @@ const {
   getPost,
   likePost,
   fetchPosts,
+  userPosts,
 } = require("../controllers/postController");
 
 const router = express.Router();
@@ -27,5 +28,8 @@ router.put("/:id/like", likePost);
 
 // fetch user post
 router.get("/feed/:id", fetchPosts);
+
+// Fetch only the posts of the passed user
+router.get("/fetchPosts/:id", userPosts);
 
 module.exports = router;

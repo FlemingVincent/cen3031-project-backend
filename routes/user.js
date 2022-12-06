@@ -8,6 +8,7 @@ const {
   deleteUser,
   getUser,
   followUser,
+  fetchAllUser,
 } = require("../controllers/userController");
 
 const router = express.Router();
@@ -29,5 +30,8 @@ router.get("/:id", getUser);
 
 // follow/unfollow user route
 router.put("/:id/follow", followUser);
+
+// get all users important data
+router.get("/all/users", fetchAllUser);
 
 module.exports = router;
