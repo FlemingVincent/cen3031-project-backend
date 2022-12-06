@@ -8,7 +8,6 @@ const createPost = async (req, res) => {
   try {
     const savePost = await newPost.save();
     const user = await User.findById(newPost.user._id);
-    //res.status(200).json({ user });
     res.status(200).json({ savePost });
     return user;
   } catch (error) {
@@ -60,13 +59,10 @@ const getPost = async (req, res) => {
 const likePost = async (req, res) => {
   try {
     const obtainedPost = await Post.findById(req.params.id);
-    if (!obtainedPost.liked == true) {
-      //await obtainedPost.updateOne({$push : {likes: req.body.author}});
+    if (!obtainedPost.liked) {
       await obtainedPost.updateOne({ $set: { liked: true } });
       res.status(200).json("Post has been liked!");
     } else {
-      //await obtainedPost.updateOne({$pull : {likes: req.body.author}})
-      //await obtainedPost.updateOne({$pull : {liked: false}})
       await obtainedPost.updateOne({ $set: { liked: false } });
       res.status(200).json("Post has been disliked!");
     }
